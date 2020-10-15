@@ -21,21 +21,30 @@ RUN gem install bundler \
 
 WORKDIR /app
 
-# ENV RAILS_ENV production
-ENV RAILS_ENV development
+# ! production / development
+ENV RAILS_ENV production
+# ENV RAILS_ENV development
 
 # Node 모듈 설치
 COPY package.json yarn.lock ./
+
+# ! production / development
 # RUN yarn install --production
 RUN yarn install
 
 # Gem 모듈 설치
 COPY Gemfile Gemfile.lock ./
-# RUN bundle install --without development test
-RUN bundle install
+
+# ! production / development
+RUN bundle install --without development test --jobs 8
+# RUN bundle install
+
+# scss > css 파일로
 
 # 레일즈 앱 전체 복사
 COPY . .
+
+RUN RAILS_ENV=production rails assets:precompile
 
 EXPOSE 3000
 CMD ["bundle", "exec", "rails", "server", "-b", "0.0.0.0", "-p", "3000"]
