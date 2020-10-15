@@ -1,0 +1,10 @@
+docker run -it -d \
+    --net=host \
+    -e MYSQL_HOST=localhost \
+    -e MYSQL_USER=root \
+    -e MYSQL_PASSWORD=password \
+    -e MYSQL_DATABASE=rails-data \
+    -e ENABLE_FILE_LOG=true \
+    -v $(pwd)/data/storage:/app/storage \
+    -v $(pwd)/data/log:/app/log \
+    rails-docker
